@@ -1,0 +1,32 @@
+{
+    "name": "andrzejkupczyk/eloquent-search",
+    "description": "Laravel Advanced Eloquent Search Filters",
+    "require": {
+        "php": "^7.0",
+        "illuminate/database": "^5.5",
+        "illuminate/pipeline": "^5.5",
+        "illuminate/support": "^5.5"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.3"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Andrzej Kupczyk",
+            "email": "kontakt@andrzejkupczyk.pl"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "WebGarden\\Search\\": "src/"
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "sort-packages": true
+    },
+    "scripts": {
+        "test": "phpunit"
+    }
+}
