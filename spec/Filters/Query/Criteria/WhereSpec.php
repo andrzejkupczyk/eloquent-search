@@ -26,7 +26,7 @@ class WhereSpec extends ObjectBehavior
         $this->boolean->shouldBe('or');
     }
 
-    function it_returns_default_parameters_values()
+    function it_uses_default_parameters_values()
     {
         $this->beConstructedWith('foo');
 

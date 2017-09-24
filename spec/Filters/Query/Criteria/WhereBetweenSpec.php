@@ -26,7 +26,7 @@ class WhereBetweenSpec extends ObjectBehavior
         $this->not->shouldBe(true);
     }
 
-    function it_returns_default_parameters_values()
+    function it_uses_default_parameters_values()
     {
         $this->beConstructedWith('foo', [1, 10]);
 
