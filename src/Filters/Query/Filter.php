@@ -13,4 +13,16 @@ abstract class Filter implements QueryFilter
     {
         $this->parameters = $parameters;
     }
+
+    /**
+     * Get a parameter's value based on its name.
+     *
+     * @param  string $name
+     *
+     * @return mixed|null
+     */
+    public function __get(string $name)
+    {
+        return $this->parameters[$name] ?? null;
+    }
 }

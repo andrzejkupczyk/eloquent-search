@@ -8,7 +8,8 @@
         "illuminate/support": "^5.5"
     },
     "require-dev": {
-        "phpunit/phpunit": "^6.3"
+        "memio/spec-gen": "^0.8",
+        "phpspec/phpspec": "^4.0"
     },
     "license": "MIT",
     "authors": [
@@ -27,6 +28,6 @@
         "sort-packages": true
     },
     "scripts": {
-        "test": "phpunit"
+        "test": "phpspec run --ansi"
     }
 }

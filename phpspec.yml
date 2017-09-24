@@ -1,0 +1,6 @@
+suites:
+    default:
+        namespace: WebGarden\Search
+        psr4_prefix: WebGarden\Search
+extensions:
+    Memio\SpecGen\MemioSpecGenExtension: ~
