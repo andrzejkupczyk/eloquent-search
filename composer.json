@@ -2,7 +2,7 @@
     "name": "andrzejkupczyk/eloquent-search",
     "description": "Laravel Advanced Eloquent Search Filters",
     "require": {
-        "php": "^7.0",
+        "php": "^7.1",
         "illuminate/database": "^5.5",
         "illuminate/pipeline": "^5.5",
         "illuminate/support": "^5.5"
