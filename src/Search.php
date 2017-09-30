@@ -55,6 +55,14 @@ class Search
     }
 
     /**
+     * Get clone of the original query builder.
+     */
+    public function query(): Builder
+    {
+        return clone $this->query;
+    }
+
+    /**
      * Get a closure that configures the default pipeline.
      *
      * @return \Closure
@@ -62,7 +70,7 @@ class Search
     protected function filterPipeline(): \Closure
     {
         return function (Pipeline $pipeline, Segment $segment) {
-            return $pipeline->send($this->query)
+            return $pipeline->send($this->query())
                 ->via('apply')
                 ->through($segment->filters())
                 ->then(function (Builder $query) {
