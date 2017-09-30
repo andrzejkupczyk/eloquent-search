@@ -5,14 +5,15 @@ namespace WebGarden\Search;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pipeline\Hub;
 use Illuminate\Pipeline\Pipeline;
 use Illuminate\Support\Facades\App;
 use WebGarden\Search\Contracts\Filtering\Segment;
 
 class Search
 {
-    /** @var Pipeline */
-    protected $pipeline;
+    /** @var Hub */
+    protected $hub;
 
     /** @var Builder */
     protected $query;
@@ -29,11 +30,12 @@ class Search
         return new self($model->newQuery());
     }
 
-    public function __construct(Builder $query, Pipeline $pipeline = null)
+    public function __construct(Builder $query, Hub $hub = null)
     {
-        /** @noinspection PhpUndefinedMethodInspection */
-        $this->pipeline = $pipeline ?: App::make(Pipeline::class);
         $this->query = $query;
+
+        /** @noinspection PhpUndefinedMethodInspection */
+        $this->hub = $hub ?: App::make(Hub::class)->defaults($this->defaultPipeline());
     }
 
     /**
@@ -45,10 +47,17 @@ class Search
      */
     public function apply(Segment $segment): Collection
     {
-        return $this->pipeline->send($this->query)
-            ->via('apply')
-            ->through($segment->filters())
-            ->then(\Closure::fromCallable([$this, 'fetch']));
+        return $this->hub->pipe($segment);
+    }
+
+    protected function defaultPipeline(): \Closure
+    {
+        return function (Pipeline $pipeline, Segment $segment) {
+            return $pipeline->send($this->query)
+                ->via('apply')
+                ->through($segment->filters())
+                ->then(\Closure::fromCallable([$this, 'fetch']));
+        };
     }
 
     /**
