@@ -30,16 +30,17 @@ class Search
         return new self($model->newQuery());
     }
 
-    public function __construct(Builder $query, Hub $hub = null)
+    public function __construct(Builder $query)
     {
-        $this->query = $query;
-
         /** @noinspection PhpUndefinedMethodInspection */
-        $this->hub = $hub ?: App::make(Hub::class)->defaults($this->defaultPipeline());
+        $this->hub = App::make(Hub::class);
+        $this->hub->defaults($this->filterPipeline());
+
+        $this->query = $query;
     }
 
     /**
-     * Send given filters through a pipeline and get search results.
+     * Send given filters through a pipeline and get the search results.
      *
      * @param  Segment $segment
      *
@@ -47,28 +48,26 @@ class Search
      */
     public function apply(Segment $segment): Collection
     {
-        return $this->hub->pipe($segment);
+        /** @var Builder $query */
+        $query = $this->hub->pipe($segment);
+
+        return $query->get();
     }
 
-    protected function defaultPipeline(): \Closure
+    /**
+     * Get a closure that configures the default pipeline.
+     *
+     * @return \Closure
+     */
+    protected function filterPipeline(): \Closure
     {
         return function (Pipeline $pipeline, Segment $segment) {
             return $pipeline->send($this->query)
                 ->via('apply')
                 ->through($segment->filters())
-                ->then(\Closure::fromCallable([$this, 'fetch']));
+                ->then(function (Builder $query) {
+                    return $query;
+                });
         };
-    }
-
-    /**
-     * Execute the query and fetch results.
-     *
-     * @param  Builder $query
-     *
-     * @return Collection
-     */
-    protected function fetch(Builder $query): Collection
-    {
-        return $query->get();
     }
 }
