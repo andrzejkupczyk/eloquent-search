@@ -39,7 +39,7 @@ class Search
     }
 
     /**
-     * Send given filters through a pipeline and get search results.
+     * Send given filters through a pipeline and get the search results.
      *
      * @param  Segment $segment
      *
@@ -50,7 +50,12 @@ class Search
         return $this->hub->pipe($segment);
     }
 
-    protected function defaultPipeline(): \Closure
+    /**
+     * Get a closure that configures the default pipeline.
+     *
+     * @return \Closure
+     */
+    public function defaultPipeline(): \Closure
     {
         return function (Pipeline $pipeline, Segment $segment) {
             return $pipeline->send($this->query)
