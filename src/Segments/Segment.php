@@ -10,13 +10,17 @@ class Segment implements SegmentInterface
     /** @var QueryFilter[] */
     protected $filters;
 
-    public function __construct(array $filters = [])
+    public function __construct(array $filters)
     {
-        $this->filters = array_filter($filters, [$this, 'validateFilter']);
+        if (!$filters = array_filter($filters, [$this, 'validateFilter'])) {
+            throw new \InvalidArgumentException('The segment must contain at least one valid filter.');
+        }
+
+        $this->filters = $filters;
     }
 
     /**
-     * {@inheritDoc}
+     * @return QueryFilter[]
      */
     public function filters(): array
     {
