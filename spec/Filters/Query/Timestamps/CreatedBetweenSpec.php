@@ -9,17 +9,17 @@ use WebGarden\Search\Filters\Query\Timestamps\CreatedBetween;
 
 class CreatedBetweenSpec extends ObjectBehavior
 {
-    function it_is_initializable()
+    function it_is_initializable(\DateTime $dateTime)
     {
-        $this->beConstructedWith(new \DateTime, new \DateTime);
+        $this->beConstructedWith($dateTime, $dateTime);
 
         $this->shouldHaveType(CreatedBetween::class);
         $this->shouldBeAnInstanceOf(WhereBetween::class);
     }
 
-    function it_returns_filter_parameters()
+    function it_returns_filter_parameters(\DateTime $dateTime)
     {
-        $dates = [new \DateTime, new \DateTime];
+        $dates = [$dateTime, $dateTime];
 
         $this->beConstructedWith(...$dates);
 
