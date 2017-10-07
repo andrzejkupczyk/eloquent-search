@@ -5,7 +5,7 @@ namespace WebGarden\Search\Contracts\Filtering;
 interface Segment
 {
     /**
-     * @return QueryFilter[]
+     * Get filters assigned to the segment.
      */
     public function filters(): array;
 }

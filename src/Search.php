@@ -48,14 +48,15 @@ class Search
      */
     public function apply(Segment $segment): Collection
     {
-        /** @var Builder $query */
-        $query = $this->hub->pipe($segment);
+        $this->clear();
 
-        return $query->get();
+        $this->hub->pipe($segment);
+
+        return $this->query->get();
     }
 
     /**
-     * Get clone of the original query builder.
+     * Clone query instance in the current state.
      */
     public function query(): Builder
     {
@@ -63,14 +64,20 @@ class Search
     }
 
     /**
+     * Create a new query instance.
+     */
+    protected function clear()
+    {
+        $this->query = $this->query->newQuery();
+    }
+
+    /**
      * Get a closure that configures the default pipeline.
-     *
-     * @return \Closure
      */
     protected function filterPipeline(): \Closure
     {
         return function (Pipeline $pipeline, Segment $segment) {
-            return $pipeline->send($this->query())
+            return $pipeline->send($this->query)
                 ->via('apply')
                 ->through($segment->filters())
                 ->then(function (Builder $query) {
